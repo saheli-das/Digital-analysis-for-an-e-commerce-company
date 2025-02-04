@@ -1,4 +1,4 @@
---** Data cleaning and merging ** (slide no. 24-25)-----------
+--** Data cleaning and merging ** 
 
 ALTER TABLE ORDERS
 ALTER COLUMN PRICE_USD DECIMAL(5,2)
@@ -16,11 +16,11 @@ ALTER TABLE order_item_refunds
 ALTER COLUMN refund_amount_usd DECIMAL(5,2)
 
 /*Data type of price_usd and cogs_usd (cost) given in the orders table, orders_item table
-and order_item_refunds table are taking in ‘float’ by default while importing
-the data from ‘csv’ to ‘sql’ and thus taking the value upto 5-6 decimal places.
+and order_item_refunds table are taking in â€˜floatâ€™ by default while importing
+the data from â€˜csvâ€™ to â€˜sqlâ€™ and thus taking the value upto 5-6 decimal places.
 Changed the data type of price_usd & cogs_usd columns of both orders 
 and order_item table and order_refund_amount columns in order_refund table
-to ‘decimal (5,2)’ to take upto two decimal place*/
+to â€˜decimal (5,2)â€™ to take upto two decimal place*/
 
 
 
@@ -104,7 +104,7 @@ update table_1 set Revenue=price_usd-refund_amount_usd
 ---------------------------------------------**---------------------------------------------------
 ---------------------------------------------**-------------------------------------------------------
 
---** High Level Metrics **-- (slide no. 27-29)
+--** High Level Metrics **-- 
 
  -- Total Revenue and Total Cost
 
@@ -317,11 +317,11 @@ from cte1
 
 
 
-/*Q1.First, I’d like to show our volume growth. Can you pull overall session and 
+/*Q1.First, Iâ€™d like to show our volume growth. Can you pull overall session and 
      order volume, trended by quarter for the life of the 
      business? Since the most recent quarter is incomplete, you can decide how to handle it.*/
 
---yearly trend (slide no. 31-32)
+--yearly trend 
  
     select year(created_at) as years,
          count(items_purchased) as total_sales,
@@ -373,7 +373,7 @@ select quarter_no,years,curr_total_session,
         group by datepart(quarter,created_at),year(created_at)
 		) as x) as y
 
----order volume(quarter_wise) slide no. 36
+---order volume(quarter_wise)
 
 select  datepart(quarter,order_creation_time) as quarter_no,year(order_creation_time) as years,
        count(distinct order_id) as total_orders
@@ -418,11 +418,11 @@ select  datepart(quarter,order_creation_time) as quarter_no,year(order_creation_
 	   order by years,quarter_no
 
 
-/*Q2. Next, let’s showcase all of our efficiency improvements. I would love to show quarterly
+/*Q2. Next, letâ€™s showcase all of our efficiency improvements. I would love to show quarterly
     figures since we launched, for session-to
     order conversion rate, revenue per order, and revenue per session.*/
 
---session to order conversion rate (slide no. 37)
+--session to order conversion rate 
 
 with orders as(
     SELECT datepart(quarter,order_creation_time) as quarter_no,
@@ -450,7 +450,7 @@ with orders as(
 	order by w.years,w.quarter_no
 
 
---Revenue per order(quarter_wise) (slide no. 38)
+--Revenue per order(quarter_wise)
 
 select datepart(quarter,order_creation_time) as quarter_no,
       datepart(year,order_creation_time) as years,
@@ -464,7 +464,7 @@ group by datepart(quarter,order_creation_time),datepart(year,order_creation_time
 order by years,quarter_no
 
 
---Revenue per session (quarter_wise) slide no. 39
+--Revenue per session (quarter_wise)
 
 select datepart(quarter,created_at) as quarter_no,
       datepart(year,created_at) as years,(sum(price_usd)-sum(refund_amount_usd)) as revenue,
@@ -479,11 +479,11 @@ group by datepart(quarter,created_at),datepart(year,created_at)
 order by years,quarter_no
 
 
-/*I’d like to show how we’ve grown specific channels. Could you pull a quarterly
+/*Iâ€™d like to show how weâ€™ve grown specific channels. Could you pull a quarterly
    view of orders from G search nonbrand, B search 
    nonbrand, brand search overall, organic search, and direct type-in?*/
 
-   --nonbrand search overall((quarter_wise)) (slide no. 40)
+   --nonbrand search overall((quarter_wise)) 
 
  select DATEPART(quarter,order_creation_time) as quarter_no,year(order_creation_time) as years,
         count(distinct order_id) as total_orders,
@@ -498,7 +498,7 @@ where  utm_campaign='nonbrand'
 group by DATEPART(quarter,order_creation_time),year(order_creation_time)
 order by years,quarter_no
 
---brand search overall(quarter_wise) (slide no. 40)
+--brand search overall(quarter_wise) 
 
  select DATEPART(quarter,order_creation_time) as quarter_no,year(order_creation_time) as years,
         count(distinct order_id) as total_orders,
@@ -514,7 +514,7 @@ group by DATEPART(quarter,order_creation_time),year(order_creation_time)
 order by years,quarter_no
 
  
- --G search nonbrand(quarter_wise) (slide no. 41)
+ --G search nonbrand(quarter_wise) 
  
  -- revenue and orders
 
@@ -532,7 +532,7 @@ group by DATEPART(quarter,order_creation_time),year(order_creation_time)
 order by years,quarter_no
 
 
- --B search nonbrand(quarter_wise) (slide no. 42)
+ --B search nonbrand(quarter_wise)
 
   select DATEPART(quarter,order_creation_time) as quarter_no,year(order_creation_time) as years,
         count(distinct order_id) as total_orders,
@@ -547,7 +547,7 @@ where utm_source='bsearch' and utm_campaign='nonbrand'
 group by DATEPART(quarter,order_creation_time),year(order_creation_time)
 order by years,quarter_no
 
---organic search(quarter_wise) (slide no. 43)
+--organic search(quarter_wise) 
 
  select DATEPART(quarter,order_creation_time) as quarter_no,year(order_creation_time) as years,
         count(distinct order_id) as total_orders,
@@ -563,7 +563,7 @@ group by DATEPART(quarter,order_creation_time),year(order_creation_time)
 order by years,quarter_no
 
 
---direct type-in(quarter_wise) (slide no. 44)
+--direct type-in(quarter_wise)
 
  select DATEPART(quarter,order_creation_time) as quarter_no,year(order_creation_time) as years,
         count(distinct order_id) as total_orders,
@@ -579,11 +579,11 @@ group by DATEPART(quarter,order_creation_time),year(order_creation_time)
 order by years,quarter_no
 
 
-/* Next, let’s show the overall session-to-order conversion rate trends for those same channels,
+/* Next, letâ€™s show the overall session-to-order conversion rate trends for those same channels,
    by quarter. Please also make a note of 
    any periods where we made major improvements or optimizations.*/
 
- --G search nonbrand  session-to-order conversion rate (quarter_wise) (slide no. 45)
+ --G search nonbrand  session-to-order conversion rate (quarter_wise)
 
 with orders as(
     SELECT datepart(quarter,order_creation_time) as quarter_no,
@@ -615,7 +615,7 @@ with orders as(
 	and    w.quarter_no=o.quarter_no
 	order by w.years,w.quarter_no
 
---B search nonbrand session to order conversion rate (quarter_wise) (slide no. 46)
+--B search nonbrand session to order conversion rate (quarter_wise) 
 
 
 with orders as(
@@ -648,7 +648,7 @@ with orders as(
 	and    w.quarter_no=o.quarter_no
 	order by w.years,w.quarter_no
 
---organic search session to order conversion rate (quarter_wise) (slide no. 47)
+--organic search session to order conversion rate (quarter_wise)
 
 with orders as(
     SELECT datepart(quarter,order_creation_time) as quarter_no,
@@ -680,7 +680,7 @@ with orders as(
 	and    w.quarter_no=o.quarter_no
 	order by w.years,w.quarter_no
 
---direct type-in search session to order conversion rate (quarter_wise) (slide no. 48)
+--direct type-in search session to order conversion rate (quarter_wise) 
 
  with orders as(
     SELECT datepart(quarter,order_creation_time) as quarter_no,
@@ -714,7 +714,7 @@ with orders as(
 
 
 
---brand search overall session to order conversion rate (quarter_wise) (slide no. 49)
+--brand search overall session to order conversion rate (quarter_wise) 
 
 
 with orders as(
@@ -748,7 +748,7 @@ with orders as(
 	order by w.years,w.quarter_no
 
 
---non-brand search overall session to order conversion rate (quarter_wise) (slide no. 50)
+--non-brand search overall session to order conversion rate (quarter_wise) 
 
  
 with orders as(
@@ -783,11 +783,11 @@ with orders as(
 
 
 
-/* We’ve come a long way since the days of selling a single product.
-   Let’s pull monthly trending for revenue and margin by product, 
+/* Weâ€™ve come a long way since the days of selling a single product.
+   Letâ€™s pull monthly trending for revenue and margin by product, 
    along with total sales and revenue. Note anything you notice about seasonality.*/
 
-   ---------Product wise trend analysis and impact of new product launch (slide no. 51-55)--------
+   ---------Product wise trend analysis and impact of new product launch --------
 
 
   select month(order_creation_time) as months,year(order_creation_time) as years,
@@ -804,7 +804,7 @@ with orders as(
 
   ---seasonality by month--
 
-  ---sales, revenue & margin monthly seasonality (slide no. 56)-----
+  ---sales, revenue & margin monthly seasonality -----
 
   select month(order_creation_time) as months,datename(month,order_creation_time)as month_name,
          count(items_purchased) as total_sales,
@@ -818,7 +818,7 @@ with orders as(
   order by months
 
 ---------
- ---customer, visitor & session monthly seasonality (slide no. 57)-----
+ ---customer, visitor & session monthly seasonality -----
 
 
     select month(created_at) as months,datename(month,created_at)as month_name,
@@ -837,7 +837,7 @@ with orders as(
 
 --seasonality by quarter--
 
-----sales volume, revenue & margin quarterly seasonality (slide no. 58)
+----sales volume, revenue & margin quarterly seasonality 
 
     select datepart(quarter,order_creation_time) as quarters,
          sum(items_purchased) as total_sales,
@@ -851,7 +851,7 @@ with orders as(
   order by quarters
 
   --------
-  ----customer, total visitor & total session quarterly seasonality (slide no. 59)
+  ----customer, total visitor & total session quarterly seasonality 
       select datepart(quarter,created_at) as quarters,
          count(distinct t.[user_id]) as total_customers,
 		 count(distinct w.[user_id]) as total_visitors,
@@ -868,7 +868,7 @@ with orders as(
 
 ----seasonality by day of week-----
 
---sales volume, revenue & margin (slide no. 60)
+--sales volume, revenue & margin 
 
     select datename(weekday,created_at) as [day], DATEPART(weekday, created_at) AS day_of_week,
          sum(items_purchased) as total_sales,
@@ -883,7 +883,7 @@ with orders as(
   group by datename(weekday,created_at),DATEPART(weekday, created_at)
   order by day_of_week
   -----------------------
-  ---customer, total visitors, total session (slide no. 61)
+  ---customer, total visitors, total session 
 
      select datename(weekday,created_at) as [day], DATEPART(weekday, created_at) AS day_of_week,
          count(distinct t.[user_id]) as total_customers,
@@ -903,13 +903,13 @@ with orders as(
 
  
 
-/* Let’s dive deeper into the impact of introducing new products. Please pull monthly
+/* Letâ€™s dive deeper into the impact of introducing new products. Please pull monthly
    sessions to the /products page, and show how 
    the % of those sessions clicking through another page has changed over time, 
    along with a view of how conversion from /products 
    to placing an order has improved.*/
 
-   --click through analysis (slide no. 63-65)
+   --click through analysis 
 
 
 WITH CTE1 AS (
@@ -978,7 +978,7 @@ ORDER BY
 Could you please pull sales data since then, and show how well each product 
 cross-sells from one another?*/ 
 
---(slide no. 68)
+--(
 
 select p1.product_id primary_product_id,
 p1.product_name primary_product_name,
@@ -1000,7 +1000,7 @@ group by p1.product_id,p1.product_name,p2.product_id,p2.product_name
 Could you pull monthly trends for Gsearch sessions and orders 
 so that we can showcase the growth there?*/
 
---(slide no. 69)
+--(
 
 select concat(year(created_at),'-',DATEPART(month,created_at)) as year_month,
         count(distinct w.website_session_id) as total_sessions,
@@ -1021,7 +1021,7 @@ order by year(created_at),DATEPART(month,created_at)
 but this time splitting out nonbrand and brand campaigns separately. 
 I am wondering if brand is picking up at all. If so, this is a good story to tell.*/
 
---g-search brand vs non-brand analysis (slide no. 71-74)
+--g-search brand vs non-brand analysis 
 
 select concat(year(b.created_at),'-',right('0'+ cast(month(b.created_at) as varchar(2)),2))Month_Year,
 count(distinct a.order_id) count_of_orders,
@@ -1044,7 +1044,7 @@ split by device type?
 I want to flex our analytical muscles a little and show the board we really know 
 our traffic sources.*/
 
---slide no. 76-77
+--
 
 select  concat(year(b.created_at),'-',right('0'+ cast(month(b.created_at) as varchar(2)),2))Month_Year,
 count(DISTINCT a.order_id) count_of_orders,
@@ -1068,12 +1068,12 @@ order by year(b.created_at),month(b.created_at)
 
 /* For the gsearch lander test, please estimate the revenue that test earned us 
   (Hint: Look at the increase in CVR from 
-  the test (Jun 19 – Jul 28), and use nonbrand sessions and revenue since then to 
+  the test (Jun 19 â€“ Jul 28), and use nonbrand sessions and revenue since then to 
   calculate incremental value) */
 
---G search lander test from May 10 to Jun 18 and Jun 19 to Jul 28 in 2012  (slide no. 80)
+--G search lander test from May 10 to Jun 18 and Jun 19 to Jul 28 in 2012  
 
---For (Jun 19 – Jul 28)
+--For (Jun 19 â€“ Jul 28)
 SELECT COUNT(A.website_session_id) AS After_Sessions,
        COUNT(B.order_id) AS After_Order,
 	   SUM(B.revenue) AS After_Revenue,
@@ -1084,7 +1084,7 @@ LEFT JOIN
 WHERE A.utm_source = 'gsearch' AND A.utm_campaign = 'nonbrand' AND
      A.created_at > = '2012-06-19' AND A.created_at < = '2012-07-28'
 
---For (May 10 – Jun 18)
+--For (May 10 â€“ Jun 18)
 SELECT COUNT(A.website_session_id) AS Before_Sessions,
        COUNT(B.order_id) AS Before_Order,
 	   SUM(B.revenue) AS Before_Revenue,
@@ -1100,9 +1100,9 @@ WHERE A.utm_source = 'gsearch' AND A.utm_campaign = 'nonbrand' AND
 /*  For the landing page test you analyzed previously, it would be great to show
     a full conversion funnel from each of 
     the two pages to orders. You can use the same time period you analyzed
-	last time (Jun 19 – Jul 28).*/
+	last time (Jun 19 â€“ Jul 28).*/
 
---Conversion Funnel for landing page (slide no. 81)
+--Conversion Funnel for landing page
 
 WITH flagged_sessions AS ( 
 
@@ -1214,7 +1214,7 @@ FROM conversion_funnel;
 
 /* Impact of the Billing Test on Revenue and Session Metrics */
 
---slide no. 82
+
 
 WITH BillingData AS (
     SELECT 
@@ -1268,10 +1268,10 @@ FROM
 LEFT JOIN 
     BeforePeriod b ON a.pageview_url = b.pageview_url
 
-	/*  I’d like to tell the story of our website performance improvements over the course of the first 8 months. 
+	/*  Iâ€™d like to tell the story of our website performance improvements over the course of the first 8 months. 
 Could you pull session to order conversion rates, by month?*/
 
---slide no. 84-85
+-
 
 	 with cte1 as(
 select DATEPART(YEAR,created_at) AS Years,
@@ -1285,7 +1285,7 @@ on w.website_session_id=t.website_session_id
   group by DATEPART(YEAR,created_at),DATEPART(MONTH,created_at)) 
   select top 8 years,months,Orders,web_Sessions,Orders*100.00/web_sessions as conversion_rate
   from cte1
-  order by years,months
+  orderÂ byÂ years,months
 
 ---------------------------------------------------**-----------------------------------------------
 ---------------------------------------------------**-----------------------------------------------
@@ -1295,7 +1295,7 @@ on w.website_session_id=t.website_session_id
 /* Understanding where the customers are coming from and which channels are 
 driving the highest quality traffic */
 
- --Find the no. of visits (website session) in different Traffic Sources (slide no. 87)
+ --Find the no. of visits (website session) in different Traffic Sources
 
  select utm_source,count(distinct website_session_id) as total_session
  from website_sessions
@@ -1324,7 +1324,7 @@ group by utm_source
 /* Looking at conversion rate (CVR) which is the percentage of the traffic that 
 converts into sales or revenue activity ( Traffic Source Conversion Rates)*/
 
--- conversion rate (slide no. 88)
+-- conversion rate
 
 select utm_source,count(distinct web_session) as total_session,
                   count(distinct orders) as total_order,
@@ -1338,14 +1338,14 @@ on w.website_session_id=t.website_session_id
  and order_item_refund_id is null) as x
  group by utm_source
 
- --Pageviews (slide no. 88)
+ --Pageviews
 
  select utm_source,count(distinct website_pageview_id ) as total_pageview
  from table_2
  group by utm_source
 
  
---Pages per Session (slide no. 88)
+--Pages per Session 
 
  select utm_source,count(distinct website_session_id) as total_sessions,
                    count( distinct website_pageview_id) as total_pages,
@@ -1353,7 +1353,7 @@ on w.website_session_id=t.website_session_id
  from table_2
  group by utm_source
 
- --Average session duration (slide no. 88)
+ --Average session duration 
 
  select utm_source, sum(session_duration) as total_session_duration,
  count(distinct website_session_id) as total_sessions,
@@ -1368,7 +1368,7 @@ on w.website_session_id=t.website_session_id
   group by utm_source
 
 
-  --Bounce rate (slide no. 88)
+  --Bounce rate 
 
 with CTE1 as (select utm_source, website_session_id as single_page_session_id
                from table_2
@@ -1383,7 +1383,7 @@ on single_page_session_id=website_session_id
 and c.utm_source=t.utm_source
 group by t.utm_source
 
---traffic source wise total customers, orders, revenue (slide no. 89)
+--traffic source wise total customers, orders, revenue 
 
 select utm_source,count(distinct [user_id]) as total_customer,
             count(distinct order_id) as total_order,
@@ -1397,7 +1397,7 @@ and order_item_refund_id is null) as x
 group by utm_source
 
 
---Traffic Source Trending (quarter_wise) (slide no. 90-93)
+--Traffic Source Trending (quarter_wise) 
 
  select utm_source,DATEPART(quarter,created_at) as quarter_no,year(created_at) as years,
         count(distinct w.website_session_id) as total_sessions,
@@ -1417,7 +1417,7 @@ order by years,quarter_no
 
 ----------------
 
---Traffic Source Trending (month_wise) (slide no. 94-95)
+--Traffic Source Trending (month_wise) 
 
  select utm_source,month(created_at) as month_no,year(created_at) as years,
         count(distinct w.website_session_id) as total_sessions,
@@ -1462,7 +1462,7 @@ order by years,quarters
 
 /*Identify the most common landing page and the first thing a user sees.*/
 
---slide no. 98
+
 
 SELECT --TOP 1
     wp.pageview_url AS landing_page,
@@ -1485,7 +1485,6 @@ ORDER BY
 /* For most viewed pages and common landing pages, understand how those pages perform
    for business objectives.*/
 
--- slide no. 99-100
 
 with cte1 as(
 SELECT 
@@ -1510,13 +1509,13 @@ GROUP BY
 	join cte2 as c2 
 	on c1.pages=c2.pages
 ORDER BY 
-    total_views DESC, revenue DESC
+    total_views DESC,Â revenueÂ DESC
 
 ----------------------------------------------------------------
 
 --Analyzing Bounce Rates & Landing Page Tests.
 
---slide no. 101
+
 
 WITH LandingPageViews AS (
     -- Get the landing page for each session
@@ -1572,8 +1571,6 @@ ORDER BY
     to the website pages and pushing 
     maximum products to customer orders.*/
 
-	--slide no. 102
-
 WITH PageConversion AS (
     SELECT 
         wp.pageview_url AS pages,
@@ -1626,7 +1623,7 @@ ORDER BY
 /*1.Understanding which marketing channels are driving the most sessions and orders
 through your website.*/
 
---slide no. 106
+
 
 select 
 case 
@@ -1654,7 +1651,7 @@ order by count_of_orders desc,count_of_websessions desc
 /*2.Understanding differences in user characteristics and conversion performance 
 across marketing channels.*/
 
---slide no. 108
+
 
 select case 
 when b.utm_source != 'N/A' and b.utm_campaign! = 'N/A' and b.utm_content !='N/A'  then 'Paid_search'
@@ -1687,7 +1684,6 @@ order by Conversion_rate desc
 
 /*Analyzing channel portfolios*/
 
---slide no. 109
 
 select case
 when b.utm_source != 'N/A' and b.utm_campaign! = 'N/A' and b.utm_content !='N/A'  then 'Paid_search'
@@ -1718,7 +1714,7 @@ order by total_revenue desc
 ------------------------------------------------
 /*Cross-Channel bid Optimization*/
 
---slide no. 110
+
 
 select 
 case
@@ -1780,7 +1776,7 @@ order by year(b.session_creation_time),month(b.session_creation_time)
 
 /*Analyzing Direct,Broad-Driven Traffic*/
 
---slide no. 114
+
 
 select 
 case
@@ -1810,7 +1806,7 @@ end
 
 /*1.Analysing product sales & product launches*/
 
---slide no. 114
+
 
 select product_name,
 min(product_creation_time) as product_launch_date,
@@ -1826,7 +1822,7 @@ order by total_revenue desc
 ---------------------------------------------------------------------
 /*3.Cross-selling & product portfolio analysis*/
 
---slide no. 119
+
 
 with orderproducts as(
 select a.order_id,
@@ -1861,7 +1857,7 @@ order by cross_sell_revenue desc
 
 ----total revenue and quantity sold-----------------
 
---slide no. 121
+
 
 select 
 product_id,
@@ -1878,7 +1874,6 @@ order by total_revenue desc
 
 ---page views leading to purchase-------
 
---slide no. 122
 
 WITH purchase_views AS (
     SELECT 
@@ -1912,7 +1907,7 @@ ORDER BY
     total_pageviews DESC;
 
 
----profit margin----------------------- (slide no. 124)
+---profit margin----------------------- 
 
 
 select 
@@ -1930,7 +1925,7 @@ order by profit_margin_Percentage desc
 
 /*4.Analysing product refund rates.*/
 
---slide no. 125-126
+
 
 select 
 product_name,
@@ -1949,7 +1944,7 @@ order by refund_percent desc
 /*6.Identify the most and least viewed pages by the customer to make creative decisions on 
 the enhancement of the pages.*/
 
---slide no. 128
+
 
 select 
 pageview_url,
@@ -1961,7 +1956,6 @@ order by count_of_users desc
 
 /*2.Analysing product-level website pathing & conversion funnels.*/
 
---slide no. 129-130
 
 WITH a AS (
         SELECT 
@@ -2115,7 +2109,7 @@ FROM #journey;
 /*7.Analyzing the conversion funnels of customers to identify the most common path customers,
 the before purchasing products(from landing page to sale) and lower bounce rate.*/
 
---slide no. 133
+
 
 SELECT 
     'The original mr fuzzy' as product_name,
@@ -2201,7 +2195,7 @@ from #journey
 
 /* Analyzing Users Repeat Visit (identifying repeat visitors, analysing repeat behaviour)*/
 
---slide no. 136
+
 
 --Identification of Repeat Visitors
 
@@ -2232,7 +2226,6 @@ select  [user_id],count(distinct website_session_id) as total_visits from table_
 group by [user_id] 
 having count(distinct website_session_id)=1) as y) as z
 
---slide no. 136
 
 --Average session duration for one_time visitors
 
@@ -2338,7 +2331,7 @@ on w.website_session_id=t.website_session_id
 
 
 
---One_time vs Repeated customers (slide no. 137)
+--One_time vs Repeated customers 
 
 --Repeat customer percentage
 
@@ -2444,7 +2437,7 @@ from cte3
 
 /*	Identify frequency and recency of visits to segment users
     by their engagement level (e.g., low, moderate, high repeat visitors) */
---slide no. 139
+
 
 with cte1
 as(select w.[user_id],
@@ -2506,7 +2499,7 @@ ORDER BY total_user DESC
 
 --Investigate what pages or content repeat visitors engage with most
 
---slide no. 140
+
 
 WITH repeat_visitors AS (
     SELECT 
@@ -2536,7 +2529,6 @@ group by pageview_url
 /* Assess visit sources (organic, direct, referral) to see which channels are bringing
   in repeat visitors */
 
---slide no. 142
 
   WITH repeat_visitors AS (
     SELECT 
@@ -2568,7 +2560,7 @@ where utm_content!='null'
 
 ----------------------------------------------------------------
 
-----Entry page analysis for repeat visitors (slide no. 143)
+----Entry page analysis for repeat visitors
 
 WITH RepeatVisitors AS (
     --  Identify users with multiple sessions
@@ -2625,7 +2617,7 @@ group by t.pageview_url) select * from entry_page
 /* Identify at which stages users drop off, especially in 
    multi-step processes (e.g., checkout, sign-up) */
    
-   --Exit page analysis for repeat visitor (slide no. 144)
+   --Exit page analysis for repeat visitor 
 
    WITH cte_1 AS (
     SELECT 
@@ -2709,7 +2701,6 @@ group by t.pageview_url) select * from exit_page
 -----------------------------------------------------------------
 ---Visitor cohort analysis (for all website visitors)
 
---slide no. 147
 
 with cohort as(
 select [user_id], created_at,
@@ -2742,7 +2733,7 @@ order by months desc
 ---------------------------------------------------------
 
 
-----Segment the customers  based on the revenue (slide no. 149)
+----Segment the customers  based on the revenue 
 
 select  distinct segmentation,count( [user_id])over(partition by segmentation)as total_customer,
                  sum(rev)over(partition by segmentation)  as total_revenue,
@@ -2760,7 +2751,7 @@ order by total_revenue desc
 
 ---------------------------------------------------------
 
---RFM segmentation analysis (slide no. 150)
+--RFM segmentation analysis 
 
 
 with cte1
@@ -2826,7 +2817,7 @@ ORDER BY Total_Revenue DESC
 
 
 
------Customer cohort retention analysis (those who made final order) (slide no. 152)
+-----Customer cohort retention analysis (those who made final order) 
 
 
 with cohort as(
@@ -2893,7 +2884,7 @@ order by months desc
 
 ---------------------------------------------------------------------------
 
---customer churn quarterly (slide no. 155)
+--customer churn quarterly 
 
 With CTE1 as(
 select datepart(quarter,last_quarter.created_at) as quarters,year(last_quarter.created_at) as years,
@@ -2921,7 +2912,7 @@ CTE2 as(
  ---------------------------------------------------------------
  
 
- --Customer Lifetime Value--(slide no. 156)
+ --Customer Lifetime Value-
 
 With Avg_rev_per_cust as (select datepart(QUARTER, order_creation_time) as Quarters,
 year(order_creation_time) as Years,
@@ -2970,7 +2961,7 @@ order by yrs, qts
 /* Q1.1.	Finding Top Traffic Sources: What is the breakdown of sessions by UTM source, campaign,
         and referring domain up to April 12, 2012. */
 
---slide no. 159
+
 
 
 select utm_source,utm_campaign,http_referer,count(distinct website_session_id) as total_sessions 
@@ -3004,7 +2995,7 @@ where created_at < '2012-04-12' and utm_source='gsearch' and utm_campaign='nonbr
 /* Q3.  Traffic Source Trending: After bidding down on Apr 15, 2012, what is the trend and impact
           on sessions for gsearch nonbrand campaign? Find weekly sessions before 2012-05-10. */
 
---slide no. 160
+
 
 --after 15th april 
 
@@ -3056,7 +3047,6 @@ where created_at between  '2012-03-19' and '2012-04-14 23:59:59'
 /* Q4.	 Traffic Source Bid Optimization: What is the conversion rate
             from session to order by device type? */
 
---slide no. 161
 
 select  device_type,utm_source,
        count(distinct order_id)*100.00/count(distinct w.website_session_id) as conversion_rate
@@ -3074,8 +3064,6 @@ group by device_type,utm_source
 
 /* Q5.  Traffic Source Segment Trending: After bidding up on desktop channel
           on 2012-05-19, what is the weekly session trend for both desktop and mobile? */
-
---slide no. 162
 
 --after bidding up
 		  
@@ -3100,7 +3088,7 @@ order by week_no
 
 --Q6. Analyzing Seasonality: Pull out sessions and orders by year, monthly and weekly for 2012?
 
---slide no. 163
+
 
 select year(created_at) as years,
      count(distinct order_id) as total_orders,count(distinct w.website_session_id) as total_sessions
@@ -3142,7 +3130,7 @@ categorized by hour of the day  and day of the week,
 between September 15th and November 15th ,2013, excluding holidays 
 to assist in determining appropriate staffing levels for live chat support on the website? */
 
---slide no. 164 
+
 
 select datepart(hour,created_at) as [hour],count(distinct website_session_id) as total_sessions,
 count(distinct website_session_id)/(datediff(day,'2013-09-15','2013-11-15')-5) as avg_session_per_hour
@@ -3152,7 +3140,7 @@ CAST(created_at AS DATE)  not in('2013-10-02','2013-10-13','2013-10-16','2013-11
 group by datepart(hour,created_at)
 order by [hour] 
 
---slide no. 165
+
 
 select datename(weekday,created_at) as [day], DATEPART(weekday, created_at) AS day_of_week,
 count(distinct website_session_id) as total_sessions,
@@ -3167,7 +3155,7 @@ order by day_of_week
 /*Q8.  Identifying Repeat Visitors: Please pull data on how many of our website visitors
          come back for another session?2014 to date is good. */
 
---slide no. 166
+
 
 --Repeat visitors
 with cte1 as
@@ -3221,7 +3209,7 @@ from cte1
 /*Q9. Analyzing Repeat Behavior: What is the minimum , maximum and average time between
      the first and second session for customers who do come back?2014 to date is good.*/
 
---slide no. 166
+
 	 
 with cte_1 as
 (
@@ -3286,11 +3274,11 @@ from cte_5
 
 /* Q10.	New Vs. Repeat Channel Patterns: Analyze the channels through which repeat customers
 return to our website, comparing them to new sessions? Specifically, interested in understanding
-if repeat customers predominantly come through direct type-in or if there’s a significant portion
+if repeat customers predominantly come through direct type-in or if thereâ€™s a significant portion
 that originates from paid search ads. This analysis should cover the period 
 from the beginning of 2014 to the present date.*/
 
---slide no. 167
+
 
 --Repeat visitor
 	 
@@ -3344,7 +3332,7 @@ group by utm_content,http_referer
 /*1.	Analyzing Channel Portfolios: What are the weekly sessions data for both gsearch 
 and bsearch from August 22nd to November 29th?*/
 
---slide no. 168
+
 
 select 
 b.utm_source,
@@ -3369,7 +3357,7 @@ order by year(b.session_creation_time),datepart(weekday,b.session_creation_time)
 and bsearch from August 22nd to November 30th, including details such as utm_source, total sessions, mobile sessions, 
 and the percentage of mobile sessions?*/
 
---slide no. 170
+
 
 select 
 b.utm_campaign,
@@ -3395,7 +3383,7 @@ group by b.utm_campaign,b.utm_source
 and bsearch by device type, for the period spanning from August 22nd to September 18th?
 Additionally, include details such as device type, utm_source, total sessions, total orders, and the corresponding conversion rates.*/ 
 
---slide no. 171
+
 
 select 
 utm_source,
@@ -3423,7 +3411,6 @@ segmented by device type
 from November 4th to December 22nd? Additionally, include details such as the start date of 
 each week, device type, utm_source, total sessions, bsearch comparision.*/
 
---slide no. 182
 
 WITH weekly_sessions AS (
 SELECT 
@@ -3458,7 +3445,7 @@ week_start_date, device_type;
 /*5.	Analyzing Free Channels: Could you pull organic search , direct type in and paid brand sessions by month and 
 show those sessions as a % of paid search non brand?*/
 
---slide no. 173-175
+
 
 with monthly_sessions as (
 select 
@@ -3602,11 +3589,11 @@ FROM #journey
 
 
 /*9. 	Portfolio Expansion Analysis: Conduct a pre-post analysis comparing the month before and 
-the month after the launch of the “Birthday Bear” 
+the month after the launch of the â€œBirthday Bearâ€ 
 product on December 12th, 2013? Specifically, containing the changes in session-to-order conversion rate, average order value (AOV),
 products per order, and revenue per session.*/
 
---slide no. 178
+
 
 WITH pre_launch AS (
     SELECT
@@ -3660,7 +3647,7 @@ ORDER BY period;
 
 /*10.	Product Refund Rates: What is monthly product refund rates, by product and confirm quality issues are now fixed? */
 
---slide no. 180
+
 
 
 With monthly_sales AS (
@@ -3697,7 +3684,7 @@ year_,month_,product_id;
      \lander-1 and \home in the A/B test conducted by ST for the gsearch nonbrand campaign,
 	 considering traffic received by \lander-1 and \home before*/
 
---slide no. 184-185
+
 
 -- Step 1: Find when /lander-1 was first displayed and limit by date
 WITH FirstPageViews AS (
@@ -3798,7 +3785,7 @@ FROM SessionCounts_1;
 since June 1, 2012, along with their respective bounce rates, as requested by ST? Please limit the results to the period between June 1, 2012,
  and August 31, 2012, based on the email received on August 31, 2021.*/
 
---slide no. 186
+
 
 WITH FirstPageViews AS (
     -- Step 1: Find first page view for each session and limit by date range
@@ -3861,7 +3848,7 @@ ORDER BY week_start_date, landing_page;
 --percentages for \lander-1, product, mrfuzzy, cart, shipping, billing, and thank you pages 
 --from August 5, 2012, to September 5,2012?
 
---slide no. 187
+
 
 WITH RelevantSessions AS (
     SELECT
@@ -3923,7 +3910,7 @@ FROM SessionFunnelView;
 --what is the traffic and billing to order conversion rate of 
 --both pages new/billing-2 page?
 
---slide no. 188
+
 
 WITH PageViewCounts AS ( 
 
@@ -3961,7 +3948,7 @@ ON
 --Q9.New Vs. Repeat Performance: Provide analysis on comparison of conversion rates and revenue per session for
 --repeat sessions vs new sessions?2014 to date is good. 
 
---slide no. 189
+
 
 select  
 case when is_repeat_session =0 then 'New user' else 'Repeat user' end as users, 
@@ -3984,7 +3971,7 @@ considering the launch of the second product on January 6th?*/
 --
 --monthly order volume, revenue and margin since 1-4-2013
 
---slide no. 190
+
 
  select month(order_creation_time) as months,year(order_creation_time) as years,
           product_id,product_name,count(distinct order_id) as order_volume,
