@@ -84,7 +84,4 @@ Types of Charts Used: Line Chart, Column Chart, Stacked column chart, Combo char
 	Introduce related or complementary products/services to encourage additional purchases and increase the average revenue per customer.
 	Prepared a growth story for investor’s deck for their next round of funding
 
-**Challenges:**
-	Data is given for the very early stage of the business. So, its was very unpredictable how the business will perform after growing significantly
-	Marketing expenses was not given. Hence, customer acquisition cost could not be calculated. Hence, we could not calculate ROI 
- Digital-analysis-for-an-e-commerce-company
+
